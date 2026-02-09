@@ -116,7 +116,7 @@ export function ChatInterface() {
   return (
     <div className="flex h-full bg-background">
       {/* Sidebar for database connection */}
-      <div className="w-80 bg-muted/30 flex flex-col">
+      <div className="w-80 bg-secondary flex flex-col">
         <ConnectionPanel
           onConnect={handleConnect}
           connected={connected}

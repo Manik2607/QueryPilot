@@ -112,11 +112,11 @@ export function ConnectionPanel({
         <h2 className="text-base font-semibold">Database</h2>
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 min-h-0">
         <div className="space-y-4 px-4 pb-4">
           {connected && (
-            <Card className="border-green-500/40 bg-green-500/10">
-              <CardContent className="pt-4 pb-4">
+            <Card className="border-0 shadow-none bg-green-500/5 dark:bg-green-500/15 py-2">
+              <CardContent className="px-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
                   <div>
@@ -130,7 +130,7 @@ export function ConnectionPanel({
             </Card>
           )}
 
-          <Card className="bg-card">
+          <Card className="bg-card border-0 shadow-none">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm">Connection</CardTitle>
               <CardDescription className="text-xs">
@@ -259,7 +259,7 @@ export function ConnectionPanel({
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/30">
+          <Card className="bg-muted/30 border-0 shadow-none">
             <CardContent className="pt-4 pb-4">
               <div className="flex items-start gap-2">
                 <div className="text-xs text-muted-foreground">
