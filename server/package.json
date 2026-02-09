@@ -1,16 +1,36 @@
 {
-  "name": "server",
-  "version": "0.0.0",
-  "private": true,
+  "name": "querypilot-server",
+  "version": "1.0.0",
+  "description": "Backend server for QueryPilot - AI-powered database query interface",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest"
   },
+  "keywords": ["sql", "ai", "database", "query"],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "@google/generative-ai": "^0.21.0",
     "express": "^4.22.1",
-    "http-errors": "~1.6.3",
-    "jade": "^0.31.2",
-    "morgan": "^1.10.1"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1",
+    "mysql2": "^3.11.5",
+    "better-sqlite3": "^11.7.0",
+    "sql-formatter": "^15.4.6",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.17",
+    "@types/pg": "^8.11.10",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
   }
 }
