@@ -32,6 +32,8 @@ CONTEXT.md
 .env
 /server/.env
 /server/.env.local
+/client/.env
+/client/.env.local
 
 # Vercel
 .vercel

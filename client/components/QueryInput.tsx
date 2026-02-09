@@ -33,35 +33,38 @@ export function QueryInput({
   };
 
   return (
-    <div className="border-t p-4">
-      <div className="flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={
-            disabled
-              ? "Connect to a database to start querying..."
-              : "Ask a question about your database..."
-          }
-          disabled={disabled || isLoading}
-          className="flex-1"
-        />
-        <Button
-          onClick={handleSubmit}
-          disabled={disabled || isLoading || !input.trim()}
-          size="icon"
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
+    <div className="bg-background flex-shrink-0">
+      <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="flex gap-3 items-end">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              disabled
+                ? "Connect to a database to start querying..."
+                : "Ask a question about your database..."
+            }
+            disabled={disabled || isLoading}
+            className="flex-1 min-h-[44px] px-4 bg-muted/50 border-border/40 focus-visible:ring-1 focus-visible:ring-ring rounded-xl"
+          />
+          <Button
+            onClick={handleSubmit}
+            disabled={disabled || isLoading || !input.trim()}
+            size="icon"
+            className="h-11 w-11 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+          >
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Send className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2 px-1">
+          Press Enter to send
+        </p>
       </div>
-      <p className="text-xs text-muted-foreground mt-2">
-        Press Enter to send, Shift+Enter for new line
-      </p>
     </div>
   );
 }

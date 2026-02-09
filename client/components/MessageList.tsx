@@ -14,24 +14,28 @@ interface MessageListProps {
 
 export function MessageList({ messages }: MessageListProps) {
   return (
-    <ScrollArea className="flex-1 px-4">
-      <div className="space-y-4 py-4">
+    <ScrollArea className="flex-1 h-0">
+      <div className="max-w-4xl mx-auto px-4 py-6">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center py-12">
-            <Database className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center py-12">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-6">
+              <Database className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-2xl font-semibold mb-3">
               Welcome to QueryPilot
             </h3>
-            <p className="text-sm text-muted-foreground max-w-md">
+            <p className="text-base text-muted-foreground max-w-md leading-relaxed">
               Connect to a database and start asking questions in natural
               language. I'll convert your questions into SQL queries and show
               you the results.
             </p>
           </div>
         ) : (
-          messages.map((message) => (
-            <MessageItem key={message.id} message={message} />
-          ))
+          <div className="space-y-6">
+            {messages.map((message) => (
+              <MessageItem key={message.id} message={message} />
+            ))}
+          </div>
         )}
       </div>
     </ScrollArea>
@@ -43,72 +47,75 @@ function MessageItem({ message }: { message: Message }) {
   const isError = message.type === "error";
 
   return (
-    <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
-      {!isUser && (
-        <Avatar className="h-8 w-8">
+    <div className={`group relative ${isUser ? "flex justify-end" : ""}`}>
+      <div
+        className={`flex gap-4 items-start ${isUser ? "flex-row-reverse max-w-[85%]" : "max-w-full"}`}
+      >
+        <Avatar className="h-8 w-8 shrink-0 mt-1">
           <AvatarFallback
             className={
-              isError
-                ? "bg-destructive text-destructive-foreground"
-                : "bg-primary text-primary-foreground"
+              isUser
+                ? "bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
+                : isError
+                  ? "bg-destructive text-destructive-foreground"
+                  : "bg-gradient-to-br from-blue-500 to-purple-600 text-white"
             }
           >
-            {isError ? (
+            {isUser ? (
+              <User className="h-4 w-4" />
+            ) : isError ? (
               <AlertCircle className="h-4 w-4" />
             ) : (
               <Database className="h-4 w-4" />
             )}
           </AvatarFallback>
         </Avatar>
-      )}
 
-      <div
-        className={`flex flex-col gap-2 max-w-[80%] ${isUser ? "items-end" : "items-start"}`}
-      >
-        <Card
-          className={`px-4 py-3 ${
-            isUser
-              ? "bg-primary text-primary-foreground"
-              : isError
-                ? "bg-destructive/10 border-destructive"
-                : "bg-muted"
-          }`}
-        >
-          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-        </Card>
+        <div className="flex-1 space-y-3 min-w-0">
+          <div
+            className={`flex items-center gap-2 ${isUser ? "justify-end" : ""}`}
+          >
+            <span className="text-sm font-semibold">
+              {isUser ? "You" : isError ? "Error" : "QueryPilot"}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {message.timestamp.toLocaleTimeString()}
+            </span>
+          </div>
 
-        {message.sql && (
-          <Card className="w-full bg-secondary/50 px-4 py-3">
-            <div className="flex items-center justify-between mb-2">
-              <Badge variant="outline" className="text-xs">
-                SQL Query
-              </Badge>
-            </div>
-            <pre className="text-xs overflow-x-auto">
-              <code>{message.sql}</code>
-            </pre>
-          </Card>
-        )}
+          <div
+            className={`prose prose-sm dark:prose-invert max-w-none ${isUser ? "text-right" : ""}`}
+          >
+            <p
+              className={`text-[15px] leading-7 whitespace-pre-wrap m-0 ${isUser ? "bg-primary/10 dark:bg-primary/20 rounded-2xl px-4 py-2.5 inline-block" : ""}`}
+            >
+              {message.content}
+            </p>
+          </div>
 
-        {message.results && message.results.length > 0 && (
-          <ResultsDisplay
-            results={message.results}
-            rowCount={message.rowCount || 0}
-          />
-        )}
+          {message.sql && (
+            <Card className="bg-secondary/50">
+              <div className="px-4 py-3">
+                <div className="flex items-center justify-between mb-2">
+                  <Badge variant="outline" className="text-xs font-mono">
+                    SQL Query
+                  </Badge>
+                </div>
+                <pre className="text-xs font-mono overflow-x-auto bg-muted/50 rounded-md p-3">
+                  <code className="text-foreground">{message.sql}</code>
+                </pre>
+              </div>
+            </Card>
+          )}
 
-        <span className="text-xs text-muted-foreground">
-          {message.timestamp.toLocaleTimeString()}
-        </span>
+          {message.results && message.results.length > 0 && (
+            <ResultsDisplay
+              results={message.results}
+              rowCount={message.rowCount || 0}
+            />
+          )}
+        </div>
       </div>
-
-      {isUser && (
-        <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-secondary">
-            <User className="h-4 w-4" />
-          </AvatarFallback>
-        </Avatar>
-      )}
     </div>
   );
 }

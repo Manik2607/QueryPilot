@@ -1,50 +1,64 @@
 @import "tailwindcss";
 
-@theme {
-  --color-background: oklch(100% 0 0);
-  --color-foreground: oklch(10% 0 0);
-  --color-card: oklch(100% 0 0);
-  --color-card-foreground: oklch(10% 0 0);
-  --color-popover: oklch(100% 0 0);
-  --color-popover-foreground: oklch(10% 0 0);
-  --color-primary: oklch(10% 0 0);
-  --color-primary-foreground: oklch(98% 0 0);
-  --color-secondary: oklch(96% 0 0);
-  --color-secondary-foreground: oklch(10% 0 0);
-  --color-muted: oklch(96% 0 0);
-  --color-muted-foreground: oklch(46% 0 0);
-  --color-accent: oklch(96% 0 0);
-  --color-accent-foreground: oklch(10% 0 0);
-  --color-destructive: oklch(60% 0.2 29);
-  --color-destructive-foreground: oklch(98% 0 0);
-  --color-border: oklch(90% 0 0);
-  --color-input: oklch(90% 0 0);
-  --color-ring: oklch(10% 0 0);
-  --radius: 0.5rem;
+html,
+body,
+#__next {
+  height: 100%;
+  overflow: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: oklch(4% 0 0);
-    --color-foreground: oklch(98% 0 0);
-    --color-card: oklch(4% 0 0);
-    --color-card-foreground: oklch(98% 0 0);
-    --color-popover: oklch(4% 0 0);
-    --color-popover-foreground: oklch(98% 0 0);
-    --color-primary: oklch(98% 0 0);
-    --color-primary-foreground: oklch(10% 0 0);
-    --color-secondary: oklch(16% 0 0);
-    --color-secondary-foreground: oklch(98% 0 0);
-    --color-muted: oklch(16% 0 0);
-    --color-muted-foreground: oklch(65% 0 0);
-    --color-accent: oklch(16% 0 0);
-    --color-accent-foreground: oklch(98% 0 0);
-    --color-destructive: oklch(31% 0.2 29);
-    --color-destructive-foreground: oklch(98% 0 0);
-    --color-border: oklch(16% 0 0);
-    --color-input: oklch(16% 0 0);
-    --color-ring: oklch(84% 0 0);
-  }
+* {
+  box-sizing: border-box;
+}
+
+@theme {
+  --radius: 0.75rem;
+}
+
+:root {
+  /* Light theme - ChatGPT-inspired */
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(25% 0 0);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(25% 0 0);
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(25% 0 0);
+  --color-primary: oklch(52% 0.19 264);
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-secondary: oklch(97% 0 0);
+  --color-secondary-foreground: oklch(25% 0 0);
+  --color-muted: oklch(97% 0 0);
+  --color-muted-foreground: oklch(45% 0 0);
+  --color-accent: oklch(97% 0 0);
+  --color-accent-foreground: oklch(25% 0 0);
+  --color-destructive: oklch(58% 0.22 25);
+  --color-destructive-foreground: oklch(100% 0 0);
+  --color-border: oklch(90% 0 0);
+  --color-input: oklch(97% 0 0);
+  --color-ring: oklch(52% 0.19 264);
+}
+
+.dark {
+  /* Dark theme - ChatGPT-inspired */
+  --color-background: oklch(15% 0 0);
+  --color-foreground: oklch(95% 0 0);
+  --color-card: oklch(18% 0 0);
+  --color-card-foreground: oklch(95% 0 0);
+  --color-popover: oklch(15% 0 0);
+  --color-popover-foreground: oklch(95% 0 0);
+  --color-primary: oklch(65% 0.2 264);
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-secondary: oklch(22% 0 0);
+  --color-secondary-foreground: oklch(95% 0 0);
+  --color-muted: oklch(22% 0 0);
+  --color-muted-foreground: oklch(65% 0 0);
+  --color-accent: oklch(22% 0 0);
+  --color-accent-foreground: oklch(95% 0 0);
+  --color-destructive: oklch(50% 0.2 25);
+  --color-destructive-foreground: oklch(100% 0 0);
+  --color-border: oklch(25% 0 0);
+  --color-input: oklch(25% 0 0);
+  --color-ring: oklch(65% 0.2 264);
 }
 
 body {
@@ -52,4 +66,7 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }

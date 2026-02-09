@@ -114,9 +114,9 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-full bg-background">
       {/* Sidebar for database connection */}
-      <div className="w-80 border-r bg-muted/10">
+      <div className="w-80 bg-muted/30 flex flex-col">
         <ConnectionPanel
           onConnect={handleConnect}
           connected={connected}
@@ -126,22 +126,15 @@ export function ChatInterface() {
       </div>
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col">
-        <div className="border-b px-6 py-4">
-          <h1 className="text-2xl font-bold">QueryPilot</h1>
-          <p className="text-sm text-muted-foreground">
-            Ask questions in natural language, get SQL queries
-          </p>
-        </div>
-
-        <Card className="flex-1 m-4 flex flex-col border-none shadow-none">
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <MessageList messages={messages} />
           <QueryInput
             onSendMessage={handleSendMessage}
             disabled={!connected || isLoading}
             isLoading={isLoading}
           />
-        </Card>
+        </div>
       </div>
     </div>
   );

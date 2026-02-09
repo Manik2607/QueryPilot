@@ -24,24 +24,24 @@ export function ResultsDisplay({ results, rowCount }: ResultsDisplayProps) {
   const columns = Object.keys(results[0]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-card">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium">Query Results</CardTitle>
-          <Badge variant="secondary">
+          <CardTitle className="text-sm font-semibold">Query Results</CardTitle>
+          <Badge variant="secondary" className="font-mono">
             {rowCount} row{rowCount !== 1 ? "s" : ""}
           </Badge>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-lg">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b">
+              <tr className="bg-muted/50">
                 {columns.map((column) => (
                   <th
                     key={column}
-                    className="text-left py-2 px-3 font-medium bg-muted/50"
+                    className="text-left py-2.5 px-4 font-semibold text-xs uppercase tracking-wider text-muted-foreground"
                   >
                     {column}
                   </th>
@@ -52,14 +52,16 @@ export function ResultsDisplay({ results, rowCount }: ResultsDisplayProps) {
               {results.map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className="border-b last:border-0 hover:bg-muted/30"
+                  className="hover:bg-muted/30 transition-colors"
                 >
                   {columns.map((column) => (
-                    <td key={`${rowIndex}-${column}`} className="py-2 px-3">
+                    <td key={`${rowIndex}-${column}`} className="py-2.5 px-4">
                       {row[column] !== null && row[column] !== undefined ? (
-                        String(row[column])
+                        <span className="font-mono text-xs">
+                          {String(row[column])}
+                        </span>
                       ) : (
-                        <span className="text-muted-foreground italic">
+                        <span className="text-muted-foreground italic text-xs">
                           null
                         </span>
                       )}
