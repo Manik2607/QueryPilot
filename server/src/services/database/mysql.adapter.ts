@@ -32,6 +32,10 @@ export class MySQLAdapter implements DatabaseAdapter {
     }
 
     const [rows] = await this.connection.query(sql);
+    
+    // For SELECT queries, rows is an array
+    // For INSERT/UPDATE/DELETE, rows is a ResultSetHeader with affectedRows
+    // Return the result as-is and let the controller handle the type
     return rows as any[];
   }
 

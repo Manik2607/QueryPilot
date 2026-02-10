@@ -1,15 +1,25 @@
 // Type Definitions for QueryPilot Backend
 
+// Query execution modes
+export enum QueryMode {
+  READ_ONLY = 'read-only',      // Only SELECT queries allowed
+  SAFE = 'safe',                // General mode - asks before dangerous queries
+  FULL_ACCESS = 'full-access'   // Allows modifications and creation
+}
+
 export interface ChatRequest {
   question: string;
   database: string;
   schema?: object;
+  mode?: QueryMode;  // Query execution mode
 }
 
 export interface ChatResponse {
   sql: string;
   results: any[];
   rowCount: number;
+  requiresConfirmation?: boolean;
+  queryType?: string;
 }
 
 export interface DatabaseConnectionRequest {

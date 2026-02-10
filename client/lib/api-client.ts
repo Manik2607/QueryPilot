@@ -1,15 +1,29 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+export enum QueryMode {
+  READ_ONLY = 'read-only',
+  SAFE = 'safe',
+  FULL_ACCESS = 'full-access',
+}
+
 export interface ChatRequest {
   question: string;
   database: string;
   schema?: object;
+  mode?: QueryMode;
 }
 
 export interface ChatResponse {
   sql: string;
   results: any[];
   rowCount: number;
+  requiresConfirmation?: boolean;
+  queryType?: string;
+}
+
+export interface ExecuteConfirmedRequest {
+  sql: string;
+  database: string;
 }
 
 export interface DatabaseConnectionRequest {
@@ -86,6 +100,15 @@ class ApiClient {
 
   async sendChatMessage(request: ChatRequest): Promise<ChatResponse> {
     return this.request<ChatResponse>('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+  }
+
+  async executeConfirmedQuery(
+    request: ExecuteConfirmedRequest
+  ): Promise<ChatResponse> {
+    return this.request<ChatResponse>('/api/chat/execute', {
       method: 'POST',
       body: JSON.stringify(request),
     });

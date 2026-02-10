@@ -27,7 +27,21 @@ export class SQLiteAdapter implements DatabaseAdapter {
     }
 
     const stmt = this.db.prepare(sql);
-    return stmt.all();
+    const trimmedSql = sql.trim().toUpperCase();
+    
+    // For SELECT queries, use all() to get rows
+    if (trimmedSql.startsWith('SELECT') || trimmedSql.startsWith('SHOW') || 
+        trimmedSql.startsWith('DESCRIBE') || trimmedSql.startsWith('EXPLAIN') || 
+        trimmedSql.startsWith('PRAGMA')) {
+      return stmt.all();
+    }
+    
+    // For INSERT/UPDATE/DELETE, use run() to get metadata
+    const result = stmt.run();
+    return { 
+      affectedRows: result.changes,
+      insertId: result.lastInsertRowid 
+    } as any;
   }
 
   async getSchema(): Promise<object> {

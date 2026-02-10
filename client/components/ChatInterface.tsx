@@ -3,18 +3,23 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { MessageList } from "@/components/MessageList";
-import { QueryInput } from "@/components/QueryInput";
+import { QueryInput, QueryMode } from "@/components/QueryInput";
 import { ConnectionPanel } from "@/components/ConnectionPanel";
 import { apiClient } from "@/lib/api-client";
 
 export interface Message {
   id: string;
-  type: "user" | "assistant" | "error";
+  type: "user" | "assistant" | "error" | "confirmation";
   content: string;
   sql?: string;
   results?: any[];
   rowCount?: number;
   timestamp: Date;
+  queryType?: string;
+  pendingQuery?: {
+    sql: string;
+    database: string;
+  };
 }
 
 export function ChatInterface() {
@@ -24,7 +29,7 @@ export function ChatInterface() {
   const [currentDatabase, setCurrentDatabase] = useState<string>("");
   const [schema, setSchema] = useState<object | undefined>(undefined);
 
-  const handleSendMessage = async (question: string) => {
+  const handleSendMessage = async (question: string, mode: QueryMode) => {
     if (!connected || !currentDatabase) {
       addMessage({
         type: "error",
@@ -46,16 +51,31 @@ export function ChatInterface() {
         question,
         database: currentDatabase,
         schema,
+        mode,
       });
-
-      // Add assistant response
-      addMessage({
-        type: "assistant",
-        content: `Generated SQL query executed successfully. ${response.rowCount} row(s) returned.`,
-        sql: response.sql,
-        results: response.results,
-        rowCount: response.rowCount,
-      });
+      console.log("Chat response:", response);
+      // Check if confirmation is required
+      if (response.requiresConfirmation) {
+        addMessage({
+          type: "confirmation",
+          content: `⚠️ The following ${response.queryType?.toUpperCase()} operation requires confirmation. This will modify your database.`,
+          sql: response.sql,
+          pendingQuery: {
+            sql: response.sql,
+            database: currentDatabase,
+          },
+          queryType: response.queryType,
+        });
+      } else {
+        // Add assistant response
+        addMessage({
+          type: "assistant",
+          content: `Generated SQL query executed successfully. ${response.rowCount} row(s) returned.`,
+          sql: response.sql,
+          results: response.results,
+          rowCount: response.rowCount,
+        });
+      }
     } catch (error) {
       addMessage({
         type: "error",
@@ -67,6 +87,42 @@ export function ChatInterface() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleExecuteConfirmed = async (sql: string, database: string) => {
+    setIsLoading(true);
+
+    try {
+      const response = await apiClient.executeConfirmedQuery({
+        sql,
+        database,
+      });
+
+      addMessage({
+        type: "assistant",
+        content: `✅ Query executed successfully. ${response.rowCount} row(s) affected.`,
+        sql: response.sql,
+        results: response.results,
+        rowCount: response.rowCount,
+      });
+    } catch (error) {
+      addMessage({
+        type: "error",
+        content:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while executing the query.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancelConfirmation = () => {
+    addMessage({
+      type: "assistant",
+      content: "❌ Query execution cancelled.",
+    });
   };
 
   const handleConnect = async (type: string, credentials: any) => {
@@ -128,7 +184,11 @@ export function ChatInterface() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <MessageList messages={messages} />
+          <MessageList 
+            messages={messages}
+            onExecuteConfirmed={handleExecuteConfirmed}
+            onCancelConfirmation={handleCancelConfirmation}
+          />
           <QueryInput
             onSendMessage={handleSendMessage}
             disabled={!connected || isLoading}

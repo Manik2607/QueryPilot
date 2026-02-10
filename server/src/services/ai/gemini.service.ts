@@ -10,7 +10,7 @@ export class GeminiService {
       throw new Error('GEMINI_API_KEY is not configured');
     }
     this.genAI = new GoogleGenerativeAI(config.gemini.apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   }
 
   async convertToSQL(
@@ -38,11 +38,10 @@ export class GeminiService {
     let prompt = `You are an expert SQL query generator. Convert the following natural language question into a valid ${database} SQL query.
 
 IMPORTANT RULES:
-1. Generate ONLY SELECT queries - never use INSERT, UPDATE, DELETE, DROP, or any data modification commands
-2. Return ONLY the SQL query without any explanation or markdown formatting
-3. Do not include semicolons at the end
-4. Use proper ${database} syntax
-5. If the question is ambiguous, make reasonable assumptions`;
+1. Return ONLY the SQL query without any explanation or markdown formatting
+2. Do not include semicolons at the end
+3. Use proper ${database} syntax
+4. If the question is ambiguous, make reasonable assumptions`;
 
     if (schema) {
       prompt += `\n\nDatabase Schema:\n${JSON.stringify(schema, null, 2)}`;

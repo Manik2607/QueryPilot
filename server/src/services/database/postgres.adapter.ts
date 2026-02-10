@@ -42,6 +42,15 @@ export class PostgresAdapter implements DatabaseAdapter {
     }
 
     const result = await this.pool.query(sql);
+    
+    // For SELECT queries, return the rows array
+    // For INSERT/UPDATE/DELETE, rows will be empty but result has rowCount
+    // If rows is empty and rowCount exists, return result metadata
+    if (result.rows.length === 0 && result.rowCount !== null && result.rowCount !== undefined) {
+      // Return metadata for modification queries
+      return { rowCount: result.rowCount, rows: [] } as any;
+    }
+    
     return result.rows;
   }
 
