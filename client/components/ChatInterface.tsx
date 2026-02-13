@@ -170,9 +170,9 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-full bg-background">
+    <div className="flex h-full bg-background relative selection:bg-primary/20">
       {/* Sidebar for database connection */}
-      <div className="w-80 bg-secondary flex flex-col">
+      <div className="w-80 flex flex-col z-20 shadow-2xl shadow-black/5 bg-background/30 backdrop-blur-xl border-r border-border/20">
         <ConnectionPanel
           onConnect={handleConnect}
           connected={connected}
@@ -184,7 +184,7 @@ export function ChatInterface() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <MessageList 
+          <MessageList
             messages={messages}
             onExecuteConfirmed={handleExecuteConfirmed}
             onCancelConfirmation={handleCancelConfirmation}
