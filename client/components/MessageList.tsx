@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,23 @@ import { Button } from "@/components/ui/button";
 import { Message } from "./ChatInterface";
 import { ResultsDisplay } from "./ResultsDisplay";
 import { Database, User, AlertCircle, AlertTriangle, Check, X } from "lucide-react";
+import React from "react";
+
+/**
+ * Renders simple inline markdown: converts **bold** to <strong> tags.
+ */
+function renderInlineMarkdown(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="font-semibold">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return <code key={i} className="px-1.5 py-0.5 rounded bg-muted/60 text-xs font-mono">{part.slice(1, -1)}</code>;
+    }
+    return part;
+  });
+}
 
 interface MessageListProps {
   messages: Message[];
@@ -16,6 +34,15 @@ interface MessageListProps {
 }
 
 export function MessageList({ messages, onExecuteConfirmed, onCancelConfirmation }: MessageListProps) {
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to the latest message whenever messages change
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <ScrollArea className="flex-1 h-0">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -65,6 +92,8 @@ export function MessageList({ messages, onExecuteConfirmed, onCancelConfirmation
             ))}
           </div>
         )}
+        {/* Scroll sentinel — always at the bottom */}
+        <div ref={bottomRef} />
       </div>
     </ScrollArea>
   );
@@ -129,7 +158,7 @@ function MessageItem({
               }
             `}
           >
-            <p className="whitespace-pre-wrap m-0">{message.content}</p>
+            <p className="whitespace-pre-wrap m-0">{renderInlineMarkdown(message.content)}</p>
           </div>
 
           {message.sql && (
@@ -194,7 +223,7 @@ function MessageItem({
             </div>
           )}
 
-          {message.results && message.results.length > 0 && (
+          {message.results !== undefined && (
             <div className="w-full mt-2">
               <ResultsDisplay
                 results={message.results}

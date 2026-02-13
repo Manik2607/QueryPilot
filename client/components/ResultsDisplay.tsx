@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Inbox } from "lucide-react";
 
 interface ResultsDisplayProps {
   results: any[];
@@ -11,11 +12,16 @@ interface ResultsDisplayProps {
 export function ResultsDisplay({ results, rowCount }: ResultsDisplayProps) {
   if (!results || results.length === 0) {
     return (
-      <Card className="w-full">
-        <CardContent className="pt-6">
-          <p className="text-sm text-muted-foreground text-center">
-            No results returned
-          </p>
+      <Card className="w-full border-border/40 bg-muted/10">
+        <CardContent className="pt-6 pb-6">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="h-9 w-9 rounded-full bg-muted/50 flex items-center justify-center">
+              <Inbox className="h-4 w-4 text-muted-foreground/70" />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              No rows returned
+            </p>
+          </div>
         </CardContent>
       </Card>
     );

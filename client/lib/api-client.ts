@@ -17,6 +17,7 @@ export interface ChatResponse {
   sql: string;
   results: any[];
   rowCount: number;
+  affectedRowCount?: number;
   requiresConfirmation?: boolean;
   queryType?: string;
 }
