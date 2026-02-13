@@ -338,6 +338,18 @@ npm start       # Run production build
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+### How to Add Collaborators
+
+If you want to add someone to work on this repository, see the detailed guide in [CONTRIBUTING.md](CONTRIBUTING.md#adding-collaborators-to-the-repository).
+
+### For Contributors
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed information on:
+- Setting up your development environment
+- Making your first contribution
+- Code guidelines and best practices
+- Getting help
+
 ## License
 
 MIT
